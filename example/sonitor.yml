@@ -2,21 +2,31 @@ hosts:
   kube-server-01:
     ipv4: 188.245.43.250
 services:
-  com-datacadamia:
-    description: Datacadamia WebSite
-    protocols:
-      - https
-      - http
-    host: kube-server-01
-    domains:
-      - datacadmia.com
-      - www.datacadmia.com
   com-gerardnico:
     description: Gerardnico WebSite
-    protocol:
-      - https
-      - http
-    host: kube-server-01
-    domains:
-      - gerardnico.com
-      - www.gerardnico.com
+    dns:
+      gerardnico.com:
+        provider: cloudflare
+        name: gerardnico.com
+        record: A
+        host: kube-server-01
+      www.gerardnico.com:
+        record: A
+        provider: cloudflare
+        name: www.gerardnico.com
+        host: kube-server-01
+    probes:
+      redirect:
+        type: http
+        request:
+          method: get
+          url: http://gerardnico.com
+        response:
+          status: 308
+          headers:
+            location: https://datacadamia.com/yolo
+providers:
+  cloudflare:
+    type: cloudflare
+  ovh:
+    type: ovh

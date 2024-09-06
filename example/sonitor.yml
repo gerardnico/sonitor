@@ -1,0 +1,22 @@
+hosts:
+  kube-server-01:
+    ipv4: 188.245.43.250
+services:
+  com-datacadamia:
+    description: Datacadamia WebSite
+    protocols:
+      - https
+      - http
+    host: kube-server-01
+    domains:
+      - datacadmia.com
+      - www.datacadmia.com
+  com-gerardnico:
+    description: Gerardnico WebSite
+    protocol:
+      - https
+      - http
+    host: kube-server-01
+    domains:
+      - gerardnico.com
+      - www.gerardnico.com

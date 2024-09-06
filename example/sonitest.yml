@@ -1,0 +1,10 @@
+tests:
+  - name: Redirect
+    type: http
+    request:
+      payload: |
+        GET http://gerardnico.com
+    response:
+      status: 308
+      headers:
+        location: https://datacadamia.com/yolo

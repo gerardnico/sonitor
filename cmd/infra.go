@@ -3,9 +3,12 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v3"
 	"log"
+	"regexp"
+	"strings"
 )
 
 // Config All field of structs needs to be exported (ie public, ie capitalized)
@@ -14,14 +17,18 @@ type Config struct {
 	Services map[string]Service `yaml:"services"`
 }
 
+type DnsRecordProps struct {
+	Type string `yaml:"type"`
+	Host string `yaml:"host"`
+}
+
 type Host struct {
 	Ipv4 string `yaml:"ipv4"`
 }
 
 type Service struct {
-	Description string   `yaml:"description"`
-	Protocols   []string `yaml:"protocols"`
-	Host        string   `yaml:"host"`
+	Description string `yaml:"description"`
+	DnsNames    map[string]DnsRecordProps
 }
 
 func CheckCommand() *cli.Command {
@@ -58,16 +65,23 @@ func CheckAction() func(c context.Context, command *cli.Command) error {
 		test := viperSonitorConf.Get("hosts")
 		fmt.Println(test)
 		var config Config
-
-		err = viperSonitorConf.Unmarshal(&config)
+		err = viperSonitorConf.Unmarshal(&config, func(dc *mapstructure.DecoderConfig) {
+			dc.MatchName = func(mapKey, fieldName string) bool {
+				re := regexp.MustCompile(`[_-]`)
+				return strings.EqualFold(re.ReplaceAllString(mapKey, ""), fieldName)
+			}
+		})
 		if err != nil {
 			log.Fatalf("unable to decode into struct, %v", err)
 		}
 
 		for serviceName, service := range config.Services {
 			fmt.Println("Service:", serviceName, "Description:", service.Description)
-			host := config.Hosts[service.Host]
-			fmt.Println("Host Ipv4", host.Ipv4)
+			fmt.Println("  * DNS")
+			for dnsName, dnsProps := range service.DnsNames {
+				fmt.Println("  * Name", dnsName, ", type:", dnsProps.Host)
+			}
+
 		}
 
 		return nil

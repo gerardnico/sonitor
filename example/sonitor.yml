@@ -4,16 +4,12 @@ hosts:
 services:
   com-gerardnico:
     description: Gerardnico WebSite
-    dns:
+    dns-names:
       gerardnico.com:
-        provider: cloudflare
-        name: gerardnico.com
-        record: A
+        type: A
         host: kube-server-01
       www.gerardnico.com:
-        record: A
-        provider: cloudflare
-        name: www.gerardnico.com
+        type: A
         host: kube-server-01
     probes:
       redirect:
@@ -25,6 +21,9 @@ services:
           status: 308
           headers:
             location: https://datacadamia.com/yolo
+domains:
+  gerardnico.com:
+    provider: cloudflare
 providers:
   cloudflare:
     type: cloudflare

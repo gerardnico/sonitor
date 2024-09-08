@@ -1,11 +1,11 @@
 # $schema:
 hosts:
-  - name: kube-server-01
+  kube-server-01:
     ipv4: 188.245.43.250
 services:
   com-gerardnico:
     description: Gerardnico WebSite
-    dns-names:
+    dns-records:
       gerardnico.com:
         type: A
         host: kube-server-01

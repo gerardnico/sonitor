@@ -1,5 +1,6 @@
+# $schema:
 hosts:
-  kube-server-01:
+  - name: kube-server-01
     ipv4: 188.245.43.250
 services:
   com-gerardnico:

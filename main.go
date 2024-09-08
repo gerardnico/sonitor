@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"gerardnico/sonitor/cmd"
+	"gerardnico/sonitor/src/cmd"
 	"github.com/urfave/cli/v3"
 	"log"
 	"os"

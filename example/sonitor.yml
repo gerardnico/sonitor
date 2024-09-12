@@ -30,3 +30,10 @@ providers:
     type: cloudflare
   ovh:
     type: ovh
+  google:
+    # Api key check
+    # Example: Google Drive
+    # https://console.cloud.google.com/apis/dashboard?project=gerardnico
+    type: google
+  idrive:
+    # https://app.idrivee2.com/buckets
